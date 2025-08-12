@@ -1,0 +1,5 @@
+require("config.lazy")
+local M = require("scripts.require_all")
+M.require_all("config/configs")
+M.require_all("opts")
+require("opts/opts")
