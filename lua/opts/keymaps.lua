@@ -1,4 +1,5 @@
 local ts = require("telescope.builtin")
+local trouble = require("trouble")
 local set = vim.keymap.set
 
 set("n", "-", ":Oil<CR>")
@@ -9,3 +10,4 @@ set("n", "<leader>pb", ts.buffers, {})
 set("n", "<leader>pd", ts.diagnostics, {})
 set("n", "gd", ts.lsp_definitions, {})
 set("n", "<leader>ca", vim.lsp.buf.code_action, {})
+set("n", "<leader>dn", trouble.next)

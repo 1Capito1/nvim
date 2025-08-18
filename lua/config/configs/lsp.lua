@@ -1,3 +1,4 @@
+-- lua_ls: unchanged
 require("lspconfig").lua_ls.setup({
     settings = {
         Lua = {
@@ -6,8 +7,9 @@ require("lspconfig").lua_ls.setup({
     }
 })
 
+-- ✅ Make java.nvim/JDTLS launch with a known-good JDK and flags
+-- mason-lspconfig: keep this; DO NOT also try to configure jdtls via lspconfig
 local mason_lsp = require("mason-lspconfig")
-
 mason_lsp.setup({
     ensure_installed = { "lua_ls", "ts_ls" },
     automatic_installation = true,
