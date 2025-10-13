@@ -4,6 +4,31 @@ return {
         opts = {
             picker = {
             },
+
+            scratch = {
+            },
+
+            scroll = {
+            },
+
+            notifier = {
+
+            },
+
+            indent = {
+            },
+
+            image = {
+            },
+
+            dashboard = {
+            },
+
+            input = {
+            },
+
+            lazygit = {
+            },
         },
         keys = {
             -- picker
@@ -14,6 +39,16 @@ return {
             { "<leader>t", function() Snacks.explorer() end, desc = "tree" },
             { "<leader>h", function() Snacks.picker.help() end, desc = "help pages" },
             { "<leader>pa", function() Snacks.picker.autocmds() end, desc = "Autocmds" },
-        }
+
+            -- scratch
+            { "<leader>s", function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
+
+            -- notifier
+            --@param opts? snacks.notifier.history
+            { "<leader><leader>s", function() Snacks.notifier.show_history(opts) end, desc = "Show notification history" },
+            
+            { "<leader>gs", function() Snacks.lazygit.open() end, desc = "Open LazyGit" },
+        },
+
     }
 }

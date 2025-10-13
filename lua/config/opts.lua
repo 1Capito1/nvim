@@ -10,6 +10,7 @@ opts.shiftwidth = 4
 opts.cursorline = true
 opts.colorcolumn = "120"
 opts.signcolumn = "yes"
+opts.scrolloff = 999
 
 vim.fn.undofile = true
 
