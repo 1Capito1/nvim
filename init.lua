@@ -1,1 +1,5 @@
-require("opts")
+local M = require("scripts.require_all")
+require("config.keymaps")
+M.require_all("scripts")
+require("setup_lazy")
+require("config.opts")
