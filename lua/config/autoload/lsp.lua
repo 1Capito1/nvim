@@ -1,5 +1,16 @@
 require("mason-lspconfig").setup {
-    automatic_enable = true
+    automatic_enable = {
+        exclude = {
+            "jdtls"
+        }
+    }
 }
 
 vim.lsp.inlay_hint.enable(true)
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "java",
+    callback = function ()
+        require 'config.jdtls.jdtls_setup'.setup()
+    end
+})

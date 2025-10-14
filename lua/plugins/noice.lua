@@ -5,11 +5,18 @@ return {
         opts = {
             messages = {
                 enable = false,
+            },
+            notify = {
+                enabled = false,
+            },
+            lsp = {
+                progress = {
+                    enabled = false,
+                }
             }
         },
         dependencies = {
             "MunifTanjim/nui.nvim",
-            "rcarriga/nvim-notify"
-        }
+        },
     }
 }
