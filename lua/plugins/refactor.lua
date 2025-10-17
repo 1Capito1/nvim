@@ -7,7 +7,7 @@ return {
 	lazy = false,
 	opts = {},
 	config = function()
-		require("refactoring").setup()
+		require("refactoring").setup({})
 	end,
 	keys = {
 		{

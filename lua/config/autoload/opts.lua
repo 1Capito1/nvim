@@ -3,6 +3,7 @@ local opts = vim.opt
 opts.clipboard = "unnamedplus"
 
 opts.relativenumber = true
+opts.number = true
 opts.expandtab = true
 opts.tabstop = 4
 opts.shiftwidth = 4

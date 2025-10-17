@@ -1,8 +1,10 @@
 return {
 	{
-		-- rustaceanvim adds a lot of nice to haves for rustlang
-		"mrcjkb/rustaceanvim",
-		version = "^6",
-		lazy = false,
+		-- crates completion
+		"saecki/crates.nvim",
+		tag = "stable",
+		config = function()
+			require("crates").setup({})
+		end,
 	},
 }
