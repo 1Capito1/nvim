@@ -25,9 +25,19 @@ local function fuzzy_oil()
 					items = items,
 					layout = { preset = "select" },
 					format = "text",
+					preview = function(item, ctx)
+						if not ctx.preview_buf or not vim.api.nvim_buf_is_valid(ctx.preview_buf) then
+							ctx.preview_buf = vim.api.nvim_create_buf(false, true)
+						end
+
+						vim.cmd(("Oil %s"):format(vim.fn.fnameescape(item.text)))
+						local oil_buf = vim.api.nvim_get_current_buf()
+
+						ctx:set_preview_buf(oil_buf)
+					end,
 					confirm = function(picker, item)
 						picker:close()
-						vim.cmd("Oil " .. item.text)
+						vim.cmd("Oil " .. vim.fn.fnameescape(item.text))
 					end,
 				})
 			end
@@ -95,6 +105,12 @@ return {
 				desc = "git branches",
 			},
 			{
+				"gu",
+				function()
+					Snacks.picker.lsp_references()
+				end,
+			},
+			{
 				"<leader>pgl",
 				function()
 					Snacks.picker.git_log()
@@ -121,6 +137,34 @@ return {
 					Snacks.picker.autocmds()
 				end,
 				desc = "Autocmds",
+			},
+			{
+				"<leader>pls",
+				function()
+					Snacks.picker.lsp_symbols({})
+				end,
+			},
+			{
+				"<leader>plS",
+				function()
+					Snacks.picker.lsp_workspace_symbols()
+				end,
+			},
+			{
+				"<leader>plC",
+				function()
+					Snacks.picker.lsp_workspace_symbols({
+						symbols = { "Class" },
+					})
+				end,
+			},
+			{
+				"<leader>plc",
+				function()
+					Snacks.picker.lsp_symbols({
+						symbols = { "Class" },
+					})
+				end,
 			},
 
 			-- scratch

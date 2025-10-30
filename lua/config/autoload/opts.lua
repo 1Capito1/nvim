@@ -26,5 +26,3 @@ vim.diagnostic.config({
 		},
 	},
 })
-
-vim.cmd.colorscheme("kanagawa-paper-ink")
