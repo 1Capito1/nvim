@@ -2,7 +2,6 @@ require("mason-lspconfig").setup({
 	automatic_enable = {
 		exclude = {
 			"jdtls",
-			"rust_analyzer",
 		},
 	},
 })

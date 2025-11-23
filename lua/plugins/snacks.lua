@@ -125,7 +125,7 @@ return {
 				desc = "tree",
 			},
 			{
-				"<leader>h",
+				"<leader>he",
 				function()
 					Snacks.picker.help()
 				end,
