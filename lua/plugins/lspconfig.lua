@@ -7,9 +7,11 @@ return {
 			automatic_enable = {
 				-- rust_analyzer is managed by rustaceanvim (see plugins/rust.lua);
 				-- letting mason-lspconfig auto-enable it too would attach a second client
-				exclude = { "clangd", "jdtls", "rust_analyzer" },
+				-- basedpyright/ruff need custom settings applied before their first
+				-- enable, so they're excluded here and enabled manually below
+				exclude = { "clangd", "jdtls", "rust_analyzer", "basedpyright", "ruff" },
 			},
-			ensure_installed = { "clangd", "bashls", "postgres_lsp" },
+			ensure_installed = { "clangd", "bashls", "postgres_lsp", "basedpyright", "ruff" },
 		},
 		dependencies = {
 			{ "mason-org/mason.nvim", opts = {} },
@@ -58,11 +60,57 @@ return {
 				single_file_support = true,
 			})
 
+			-- Basedpyright Config
+			-- Owns hover/go-to-def/type checking. Ruff owns import organizing,
+			-- so basedpyright's own organize-imports action is turned off to
+			-- avoid the two conflicting on that specific action.
+			vim.lsp.config("basedpyright", {
+				settings = {
+					basedpyright = {
+						disableOrganizeImports = true,
+						analysis = { typeCheckingMode = "standard" },
+					},
+				},
+			})
+
+			-- Ruff Config
+			-- Owns linting, "Fix All", "Organize Imports". Hover is disabled below
+			-- so basedpyright's hover wins instead of ruff's.
+			vim.lsp.config("ruff", {})
+
 			-- Enable everything
 			vim.lsp.enable("nushell")
 			vim.lsp.enable("clangd")
 			vim.lsp.enable("bashls")
 			vim.lsp.enable("postgres_lsp")
+			vim.lsp.enable("basedpyright")
+			vim.lsp.enable("ruff")
+
+			-- Ruff/basedpyright both attach to python buffers; keep ruff from
+			-- shadowing basedpyright's hover, and expose ruff's fix/organize
+			-- actions as direct keymaps (also reachable via <leader>ca).
+			vim.api.nvim_create_autocmd("LspAttach", {
+				callback = function(args)
+					local client = vim.lsp.get_client_by_id(args.data.client_id)
+					if not client or client.name ~= "ruff" then
+						return
+					end
+					client.server_capabilities.hoverProvider = false
+					local buf = args.buf
+					vim.keymap.set("n", "<leader>rf", function()
+						vim.lsp.buf.code_action({
+							context = { only = { "source.fixAll.ruff" }, diagnostics = {} },
+							apply = true,
+						})
+					end, { buffer = buf, desc = "Ruff: Fix All" })
+					vim.keymap.set("n", "<leader>ro", function()
+						vim.lsp.buf.code_action({
+							context = { only = { "source.organizeImports.ruff" }, diagnostics = {} },
+							apply = true,
+						})
+					end, { buffer = buf, desc = "Ruff: Organize Imports" })
+				end,
+			})
 		end,
 	},
 }

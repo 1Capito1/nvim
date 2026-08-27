@@ -14,6 +14,16 @@ opts.termguicolors = true
 
 opts.undofile = true
 
+-- nvim-treesitter has no indents.scm for c_sharp, so its FileType autocmd
+-- leaves indentexpr pointing at a query that never fires; fall back to cindent.
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "cs",
+	callback = function()
+		vim.bo.indentexpr = ""
+		vim.bo.cindent = true
+	end,
+})
+
 local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
 vim.diagnostic.config({
 	signs = {

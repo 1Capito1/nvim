@@ -1,25 +1,42 @@
 return {
-	"mfussenegger/nvim-dap",
+	{
+		"mfussenegger/nvim-dap",
+		keys = {
+			{ "<leader>dc", function() require("dap").continue() end, desc = "Debug: Continue" },
+			{ "<leader>do", function() require("dap").step_over() end, desc = "Debug: Step Over" },
+			{ "<leader>di", function() require("dap").step_into() end, desc = "Debug: Step Into" },
+			{ "<leader>dO", function() require("dap").step_out() end, desc = "Debug: Step Out" },
+			{ "<leader>dt", function() require("dap").toggle_breakpoint() end, desc = "Debug: Toggle Breakpoint" },
+			{
+				"<leader>dB",
+				function()
+					require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: "))
+				end,
+				desc = "Debug: Conditional Breakpoint",
+			},
+			{ "<leader>dr", function() require("dap").repl.toggle() end, desc = "Debug: Toggle REPL" },
+			{ "<leader>dl", function() require("dap").run_last() end, desc = "Debug: Run Last" },
+			{ "<leader>dq", function() require("dap").terminate() end, desc = "Debug: Terminate" },
+			{ "<leader>dv", function() require("dap-view").toggle() end, desc = "Debug: Toggle View" },
+		},
+	},
 	{
 		"jay-babu/mason-nvim-dap.nvim",
 		config = function()
 			require("mason-nvim-dap").setup({
-				ensure_installed = { "codelldb" },
+				-- "python" here is the mason-nvim-dap adapter name (maps to the
+				-- "debugpy" mason package), not a mason package name itself.
+				ensure_installed = { "codelldb", "python" },
 				automatic_installation = true,
-				handlers = {},
+				handlers = {
+					-- nvim-dap-python (plugins/python.lua) owns dap.adapters.python
+					-- and dap.configurations.python outright; skip mason-nvim-dap's
+					-- own default python handler so they don't race.
+					python = function() end,
+				},
 			})
 
 			local dap = require("dap")
-
-			dap.configurations.python = {
-				{
-					type = "python",
-					request = "launch",
-					name = "Launch with input",
-					program = "${file}",
-					console = "integratedTerminal", -- <— key line
-				},
-			}
 
 			dap.configurations.rust = {
 				{
